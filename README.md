@@ -2,7 +2,7 @@
 
 This project is still in developpment.
 
-**Quick overview : **
+**Quick overview :**
 
 [![asciicast](https://asciinema.org/a/450jsl0916xu6ktu2rs3epj8b.png)](https://asciinema.org/a/450jsl0916xu6ktu2rs3epj8b)
 
