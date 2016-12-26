@@ -1,0 +1,10 @@
+{
+  "description": "Should detect bindcode",
+  "helpData": [
+    {
+      "action": "$mod+33",
+      "help": "Test"
+    }
+  ],
+  "content": "# Test\nbindcode $mod+33 something"
+}

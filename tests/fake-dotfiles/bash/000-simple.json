@@ -1,0 +1,10 @@
+{
+  "description": "Should detect simple alias",
+  "helpData": [
+    {
+      "action": "foo",
+      "help": "Test"
+    }
+  ],
+  "content": "# Test\nalias foo='bar'"
+}

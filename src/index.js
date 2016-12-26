@@ -5,7 +5,16 @@ const I3 = require('./help-programs/i3');
 const VIM = require('./help-programs/vim');
 const BASH = require('./help-programs/bash');
 
-const HELP_PROGRAMS = {
+type HelpProgram = {
+  configFile: string,
+  Create: Class
+}
+
+type HelpPrograms = {
+  [key: string]: HelpProgram
+}
+
+const HELP_PROGRAMS: HelpPrograms = {
   i3: {
     configFile: '~/.i3/config',
     Create: I3,
@@ -20,17 +29,17 @@ const HELP_PROGRAMS = {
   },
 };
 
-function runHelpProgram(programName) {
+function runHelpProgram(programName: string): void {
   assert(programName in HELP_PROGRAMS, `Program ${programName} not supported`);
 
-  const currentHelpProgram = HELP_PROGRAMS[programName];
+  const currentHelpProgram: HelpProgram = HELP_PROGRAMS[programName];
 
   const helpProgram = new currentHelpProgram.Create(currentHelpProgram.configFile);
   helpProgram.parse();
   helpProgram.displayHelp();
 }
 
-function start() {
+function start(): Promise<void> {
   return inquirer.prompt([{
     type: 'list',
     name: 'helpProgram',
@@ -39,14 +48,12 @@ function start() {
   }])
   .then(answer => runHelpProgram(answer.helpProgram))
   .catch((err) => {
-    console.error(err);
-    process.exit(1);
+    throw new Error(err);
   });
 }
 
 if (require.main === module) {
-  start()
-  .then(() => {});
+  start().then(() => {});
 }
 
 

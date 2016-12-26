@@ -3,18 +3,38 @@ const fs = require('fs');
 const chalk = require('chalk');
 const expandHomeDir = require('expand-home-dir');
 
+// Parsing type
+type CommentData = {
+  comment: string,
+  command: string
+}
+
+// Output type
+type HelpData = {
+  action: string,
+  help: string
+}
+
 class HelpProgram {
+  helpData: Array<HelpData>;
+  fullPath: string;
+  configContent: string;
+
   constructor(configPath) {
     this.helpData = [];
     this.fullPath = expandHomeDir(configPath);
     this.configContent = fs.readFileSync(this.fullPath, 'utf8');
   }
 
-  parse() {
+  /**
+  * MAIN FUNCTIONS
+  */
+
+  parse(): void {
     throw new Error(`Method parse should be overwritten for ${this.constructor.name} class`);
   }
 
-  displayHelp() {
+  displayHelp(): void {
     let template = '';
     const maxActionNameLength = _.maxBy(this.helpData, data => data.action.length);
     const maxActionNameCharacters = maxActionNameLength ? maxActionNameLength.action.length : 0;
@@ -28,12 +48,16 @@ class HelpProgram {
     process.stdout.write(template);
   }
 
-  getLines() {
+  getLines(): Array<string> {
     return this.configContent.split('\n');
   }
 
-  static getCommentLines(lines) {
-    const commentData = [];
+  /**
+  * PARSING FUNCTIONS
+  */
+
+  static getCommentLines(lines: Array<string>): Array<CommentData> {
+    const commentData: Array<CommentData> = [];
 
     for (let i = 0; i < lines.length; i += 1) {
       if (HelpProgram.isComment(lines, i)) {
@@ -52,8 +76,8 @@ class HelpProgram {
     return commentData;
   }
 
-  static getCommands(lines, index) {
-    const commands = [];
+  static getCommands(lines: Array<string>, index: number): Array<string> {
+    const commands: Array<string> = [];
 
     for (let i = index; i < lines.length; i += 1) {
       if (HelpProgram.isComment(lines, i) || HelpProgram.isBlankLine(lines, i)) {
@@ -66,12 +90,18 @@ class HelpProgram {
     return commands;
   }
 
-  static isComment(lines, index) {
+  /**
+  * UTILS FUNCTIONS
+  */
+
+  static isComment(lines: Array<string>, index: number): boolean {
     return lines[index].startsWith('#') && index + 1 < lines.length;
   }
 
-  static isBlankLine(lines, index) {
-    return lines[index].match(/^(\s)+$/);
+  static isBlankLine(lines: Array<string>, index: number): boolean {
+    const match = lines[index].match(/^(\s)*$/);
+
+    return match !== null && match.length > 0;
   }
 
 

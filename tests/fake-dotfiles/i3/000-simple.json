@@ -1,0 +1,10 @@
+{
+  "description": "Should detect bindsym",
+  "helpData": [
+    {
+      "action": "$mod+Shift",
+      "help": "Test"
+    }
+  ],
+  "content": "# Test\nbindsym $mod+Shift something"
+}
